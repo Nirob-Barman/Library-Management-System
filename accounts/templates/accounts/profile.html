@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% load static %} {% block head_title %}Banking System{% endblock %} {% block content %} 
+
+
+<div class="bg-white px-3 py-4 rounded-xl my-6">
+    <div class="flex items-center justify-between ">
+        <h4 class="font-bold text-3xl text-left pb-5">Account NO: {{request.user.account.account_number}}</h4>
+        <a href="{% url 'update_profile' %}"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Update Profile
+        </a>
+        <a href="{% url 'password_change' %}"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Change Password
+        </a>
+    </div>
+
+<div class="my-8">
+    {% if books_with_history %}
+    <h2 class="text-2xl font-bold mb-4">Borrowed Books:</h2>
+    <table class="min-w-full bg-white border border-gray-300">
+        <thead class="border">
+            <tr>
+                <th class="py-2 px-4 border-b">ISBN</th>
+                <th class="py-2 px-4 border-b">Title</th>
+                <th class="py-2 px-4 border-b">Acion</th>
+                <th class="py-2 px-4 border-b">Price</th>
+                <th class="py-2 px-4 border-b">Borrowing History</th>
+            </tr>
+        </thead>
+        <tbody class="text-center border">
+            {% for entry in books_with_history %}
+            <tr>
+                <td class="py-2 px-4 border-b">{{ entry.book.id }}</td>
+                <td><a href="{% url 'book_detail' entry.book.id %}" class="text-blue-500 hover:text-blue-700">{{ entry.book.title }}</a></td>
+                <td><a href="{% url 'book_detail' entry.book.id %}" class="text-blue-500 hover:text-blue-700">Return the book</a></td>
+                <td class="py-2 px-4 border-b">${{ entry.book.price }}</td>
+                <td class="py-2 px-4 border-b">
+                    <ul>
+                        {% for transaction in entry.history %}
+                        <li>
+                            Borrowed on {{ transaction.timestamp }} || Balance After Transaction: ${{ transaction.balance_after_transaction }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h1 class="text-2xl font-bold text-center">No books borrowed.</h1>
+    {% endif %}
+
+</div>
+
+    
+</div>
+{% endblock %}
