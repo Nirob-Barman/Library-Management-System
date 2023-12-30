@@ -16,6 +16,21 @@ from transactions.constants import BORROWED, RETURN
 
 from django.contrib.auth.decorators import login_required
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+
+def borrowed_mail(user, amount, subject, template, current_balance):
+    # mail_subject = 'Deposit Message'
+    message = render_to_string(template, {
+        'user': user,
+        'amount': amount,
+        'current_balance': current_balance,
+    })
+    send_email = EmailMultiAlternatives(subject, '', to=[user.email])
+    send_email.attach_alternative(message, 'text/html')
+    send_email.send()
+
 @login_required
 def book_detail(request, book_id):
     # book = get_object_or_404(models.Book, id=book_id)
@@ -88,6 +103,8 @@ def book_detail(request, book_id):
                 balance_after_transaction=user_account.balance,
                 transaction_type=BORROWED
             )
+
+            borrowed_mail(user, book.price, 'Borrow Message','email_templates/borrowed_email.html', user_account.balance)
 
             # Assuming you have a 'borrowers' field in your Book model
             book.borrowers.add(user)
