@@ -58,12 +58,15 @@ class LoginView(LoginView):
         # return reverse_lazy('home')
 
 
-class LogoutView(LogoutView):
-    def get_success_url(self):
-        # if self.request.user.is_authenticated:
-        #     logout(self.request)
-        return reverse_lazy('home')
-
+# class LogoutView(LogoutView):
+#     def get_success_url(self):
+#         # if self.request.user.is_authenticated:
+#         #     logout(self.request)
+#         return reverse_lazy('home')
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home')
 
 class UserProfileUpdateView(LoginRequiredMixin,View):
     template_name = 'accounts/update_profile.html'
