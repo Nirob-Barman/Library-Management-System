@@ -23,7 +23,7 @@ This Django-based library management system allows users to register, log in, bo
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/library-management-system.git
+    git clone https://github.com/Nirob-Barman/library-management-system.git
     ```
 
 2. Create a virtual environment and install dependencies:
